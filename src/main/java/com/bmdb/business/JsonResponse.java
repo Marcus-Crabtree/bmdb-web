@@ -17,8 +17,12 @@ public class JsonResponse {
 		errors = e;
 	}
 	
-	public JsonResponse(String s) {
-		errors = s;
+	// Response w/ message - either success or failure
+	public JsonResponse(String s, boolean success) {
+		if (success)
+			data = s;
+		else
+			errors = s;
 	}
 	
 	public Object getData() {
@@ -48,12 +52,20 @@ public class JsonResponse {
 	public static JsonResponse getInstance(Object d) {
 		return new JsonResponse(d);
 	}
-	
+	// Create an instance w/ an exception, use the message
 	public static JsonResponse getInstance(Exception e) {
 		return new JsonResponse(e.getMessage());
 	}
-	
+	// Create instance w/ an error message
+	public static JsonResponse getErrorInstance(String msg) {
+		return new JsonResponse(msg, false);
+	}
+	// Create instance w/ a success message
 	public static JsonResponse getInstance(String msg) {
-		return new JsonResponse(msg);
+		return new JsonResponse(msg, true);
 	}
 }
+
+
+
+

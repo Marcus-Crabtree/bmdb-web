@@ -8,25 +8,25 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import com.bmdb.business.JsonResponse;
-import com.bmdb.business.Movie;
-import com.bmdb.db.MovieRepository;
+import com.bmdb.business.Genre;
+import com.bmdb.db.GenreRepository;
 
 @RestController
 
 // list method
-@RequestMapping("/movies")
-public class MovieController {
+@RequestMapping("/genres")
+public class GenreController {
 	@Autowired
-	private MovieRepository movieRepo;
+	private GenreRepository genreRepo;
 
 	@GetMapping("/")
 	public JsonResponse list() {
 		JsonResponse jr = null;
-		List<Movie> movies = movieRepo.findAll();
-		if (movies.size() > 0) {
-			jr = JsonResponse.getInstance(movies);
+		List<Genre> genres = genreRepo.findAll();
+		if (genres.size() > 0) {
+			jr = JsonResponse.getInstance(genres);
 		} else {
-			jr = JsonResponse.getErrorInstance("No Movies found.");
+			jr = JsonResponse.getErrorInstance("No genres found.");
 		}
 		return jr;
 	}
@@ -35,11 +35,11 @@ public class MovieController {
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;
-		Optional<Movie> movie = movieRepo.findById(id);
-		if (movie.isPresent()) {
-			jr = JsonResponse.getInstance(movie.get());
+		Optional<Genre> genre = genreRepo.findById(id);
+		if (genre.isPresent()) {
+			jr = JsonResponse.getInstance(genre.get());
 		} else {
-			jr = JsonResponse.getErrorInstance("No Movie found for ID: " + id);
+			jr = JsonResponse.getErrorInstance("No genre found for ID: " + id);
 		}
 
 		return jr;
@@ -47,17 +47,17 @@ public class MovieController {
 
 // 'create' method
 	@PostMapping("/")
-	public JsonResponse createMovie(@RequestBody Movie movie) {
+	public JsonResponse createGenre(@RequestBody Genre genre) {
 		JsonResponse jr = null;
 
 		try {
-			movie = movieRepo.save(movie);
-			jr = JsonResponse.getInstance(movie);
+			genre = genreRepo.save(genre);
+			jr = JsonResponse.getInstance(genre);
 		} catch (DataIntegrityViolationException dive) {
 			jr = JsonResponse.getErrorInstance(dive.getRootCause().getMessage());
 			dive.printStackTrace();
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error creating movie: " + e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error creating genre: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -66,14 +66,14 @@ public class MovieController {
 
 // update method
 	@PutMapping("/")
-	public JsonResponse updateMovie(@RequestBody Movie movie) {
+	public JsonResponse updateGenre(@RequestBody Genre genre) {
 		JsonResponse jr = null;
 
 		try {
-			movie = movieRepo.save(movie);
-			jr = JsonResponse.getInstance(movie);
+			genre = genreRepo.save(genre);
+			jr = JsonResponse.getInstance(genre);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error updating movie: " + e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error updating genre: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -82,14 +82,14 @@ public class MovieController {
 
 //delete method
 	@DeleteMapping("/{id}")
-	public JsonResponse deleteMovie(@PathVariable int id) {
+	public JsonResponse deleteGenre(@PathVariable int id) {
 		JsonResponse jr = null;
 
 		try {
-			movieRepo.deleteById(id);
+			genreRepo.deleteById(id);
 			jr = JsonResponse.getInstance(id);
 		} catch (Exception e) {
-			jr = JsonResponse.getErrorInstance("Error deleting movie: " + e.getMessage());
+			jr = JsonResponse.getErrorInstance("Error deleting genre: " + e.getMessage());
 			e.printStackTrace();
 		}
 
