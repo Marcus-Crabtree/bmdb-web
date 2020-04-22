@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.bmdb.business.Actor;
+import com.bmdb.business.JsonResponse;
+
 import com.bmdb.db.ActorRepository;
 
 @RestController
@@ -16,14 +18,28 @@ public class ActorController {
 	private ActorRepository actorRepo;
 	
 	@GetMapping("/")
-	public List<Actor> list() {
+	public JsonResponse list() {
+		JsonResponse jr = null;
 		List<Actor> actors = actorRepo.findAll();
-		return actors;
+		if (actors.size()==0) {
+			jr = JsonResponse.getInstance("No Actors found.");
+		}
+		else {
+			jr =JsonResponse.getInstance(actors);
+		}
+		return jr;
 	}
 	@GetMapping("/{id}")
-	public Actor get(@PathVariable int id) {
+	public JsonResponse get(@PathVariable int id) {
+		JsonResponse jr = null;
 		Optional<Actor> actor = actorRepo.findById(id);
-		return actor.get();
+		if (actor.isPresent()) {
+			jr = JsonResponse.getInstance(actor.get());
+		}
+		else {
+			jr = JsonResponse.getInstance("No Actor found for ID: "+id);
+		}
+		return jr;
 	}
 	
 

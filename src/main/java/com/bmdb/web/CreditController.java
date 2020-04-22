@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.bmdb.business.Credit;
-
+import com.bmdb.business.JsonResponse;
 import com.bmdb.db.CreditRepository;
 @RestController
 @RequestMapping("/credits")
@@ -17,14 +17,28 @@ public class CreditController {
 	private CreditRepository creditRepo;
 
 	@GetMapping("/")
-	public List<Credit> list() {
+	public JsonResponse list() {
+		JsonResponse jr = null;
 		List<Credit> credits = creditRepo.findAll();
-		return credits;
+		if (credits.size()==0) {
+			jr = JsonResponse.getInstance("No Credits found.");
+		}
+		else {
+			jr = JsonResponse.getInstance(credits);
+		}
+		return jr;
 	}
 
 	@GetMapping("/{id}")
-	public Credit get(@PathVariable int id) {
+	public JsonResponse get(@PathVariable int id) {
+		JsonResponse jr = null;
 		Optional<Credit> credit = creditRepo.findById(id);
-		return credit.get();
+		if (credit.isPresent()) {
+			jr = JsonResponse.getInstance(credit.get());
+		}
+		else {
+			jr = JsonResponse.getInstance("No Credit found for ID: "+id);
+		}
+		return jr;
 	}
 }
