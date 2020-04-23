@@ -11,7 +11,7 @@ import com.bmdb.business.MovieGenre;
 import com.bmdb.business.JsonResponse;
 import com.bmdb.db.MovieGenreRepository;
 @RestController
-@RequestMapping("/moviegenres")
+@RequestMapping("/movie-genres")
 public class MovieGenreController {
 	@Autowired
 	private MovieGenreRepository movieGenreRepo;
@@ -25,6 +25,20 @@ public class MovieGenreController {
 		}
 		else {
 			jr = JsonResponse.getErrorInstance("No Movie Genres found.");
+		}
+		return jr;
+	}
+	
+	//disclaimer - this method may not follow strict API style guide rules
+	@GetMapping("/by-movie-id")
+	public JsonResponse listByMovieId(@RequestParam int movieId) {
+		JsonResponse jr = null;
+		List<MovieGenre> movieGenres = movieGenreRepo.findAllByMovieId(movieId);
+		if (movieGenres.size()>0) {
+			jr = JsonResponse.getInstance(movieGenres);
+		}
+		else {
+			jr = JsonResponse.getErrorInstance("No Movie Genres found for movie ID: "+movieId);
 		}
 		return jr;
 	}

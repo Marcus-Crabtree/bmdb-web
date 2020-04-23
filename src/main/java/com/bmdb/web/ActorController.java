@@ -1,15 +1,17 @@
 package com.bmdb.web;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import com.bmdb.business.Actor;
 import com.bmdb.business.JsonResponse;
-
+import com.bmdb.business.Movie;
 import com.bmdb.db.ActorRepository;
 
 @RestController
@@ -29,7 +31,18 @@ public class ActorController {
 		}
 		return jr;
 	}
-
+	@GetMapping("/list/{birthDate}")
+	public JsonResponse findByBirthdate(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)@PathVariable LocalDate birthdate) {
+		JsonResponse jr = null;
+		List<Actor> actors = actorRepo.findAllByBirthdateBefore(birthdate);
+		if (actors.size() > 0) {
+			jr = JsonResponse.getInstance(actors);
+		} else {
+			jr = JsonResponse.getErrorInstance("No Actors found.");
+		}
+		return jr;
+	}
+	
 	@GetMapping("/{id}")
 	public JsonResponse get(@PathVariable int id) {
 		JsonResponse jr = null;

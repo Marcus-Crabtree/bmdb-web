@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
+import com.bmdb.business.Actor;
 import com.bmdb.business.JsonResponse;
 import com.bmdb.business.Movie;
 import com.bmdb.db.MovieRepository;
