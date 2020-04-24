@@ -31,6 +31,7 @@ public class ActorController {
 		}
 		return jr;
 	}
+	//sort born before date, needs debugged
 	@GetMapping("/list/{birthDate}")
 	public JsonResponse findByBirthdate(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)@PathVariable LocalDate birthdate) {
 		JsonResponse jr = null;
