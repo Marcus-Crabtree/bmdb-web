@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.bmdb.business.MovieGenre;
 import com.bmdb.business.JsonResponse;
 import com.bmdb.db.MovieGenreRepository;
+@CrossOrigin
 @RestController
 @RequestMapping("/movie-genres")
 public class MovieGenreController {
